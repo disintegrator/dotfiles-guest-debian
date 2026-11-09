@@ -132,6 +132,7 @@ OPENROUTER_KEY = "__secret_openrouter_key"
 "~/.config/starship.toml" = { mode = "track" }
 "~/.aliases.sh" = { mode = "track" }
 "~/.gitconfig" = { mode = "track" }
+"~/functions.zsh" = { mode = "track" }
 "~/.zshrc" = { mode = "track" }
 "~/.zshenv" = { mode = "track" }
 

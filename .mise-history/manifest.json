@@ -60,6 +60,12 @@
       "autosave": true,
       "encrypt": false,
       "variants": []
+    },
+    {
+      "path": "home/functions.zsh",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
     }
   ],
   "exclude": [],
@@ -81,6 +87,7 @@
     "home/.zshrc": 436,
     "home/.aliases.sh": 436,
     "home/.zshenv": 436,
-    "home/.gitconfig": 436
+    "home/.gitconfig": 436,
+    "home/functions.zsh": 436
   }
 }
