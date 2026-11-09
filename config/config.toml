@@ -1,0 +1,161 @@
+[bootstrap.mise_shell_activate]
+zsh = true
+bash = true
+
+[settings]
+tool_update.global_auto = "12h"
+pin = true
+minimum_release_age_excludes = [
+  "aube",
+  "claude",
+  "gh",
+  "github:anomalyco/opencode",
+  "github:max-sixty/worktrunk",
+  "npm:@getpaseo/cli",
+]
+
+[bootstrap.files."/etc/apt/apt.conf.d/99-no-recommends"]
+phase = "pre-packages"
+owner = "root"
+group = "root"
+mode = "0644"
+content = """
+APT::Install-Recommends "false";
+APT::Install-Suggests "false";
+"""
+
+[bootstrap.apt.sources.chrome]
+uris = "https://dl.google.com/linux/chrome/deb/"
+suites = "stable"
+components = "main"
+key = "https://dl.google.com/linux/linux_signing_key.pub"
+fingerprint = "EB4C 1BFD 4F04 2F6D DDCC EC91 7721 F63B D38B 4796"
+
+[bootstrap.apt.sources.docker]
+uris = "https://download.docker.com/linux/ubuntu"
+components = "stable"
+key = "https://download.docker.com/linux/ubuntu/gpg"
+fingerprint = "9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+
+[bootstrap.packages]
+"apt:build-essential" = "latest"
+"apt:ca-certificates" = "latest"
+"apt:google-chrome-stable" = "latest"
+"apt:containerd.io" = "latest"
+"apt:curl" = "latest"
+"apt:docker-buildx-plugin" = "latest"
+"apt:docker-ce" = "latest"
+"apt:docker-ce-cli" = "latest"
+"apt:docker-compose-plugin" = "latest"
+"apt:git" = "latest"
+"apt:locales-all" = "latest"
+"apt:net-tools" = "latest"
+"apt:zsh" = "latest"
+
+[bootstrap.hooks.post-packages]
+description = "Install Tailscale, set operator, enable Tailscale SSH, log in if needed"
+run = [
+  "command -v tailscale >/dev/null || curl -fsSL https://tailscale.com/install.sh | sh",
+  "sudo tailscale set --operator=$USER --ssh",
+  "tailscale status >/dev/null 2>&1 || sudo tailscale up --operator=$USER --ssh",
+]
+
+[bootstrap.user]
+login_shell = "/usr/bin/zsh"
+
+[bootstrap.services.tailscaled]
+state = "running"
+enabled = true
+
+[bootstrap.linux.systemd.units.opencode]
+description = "OpenCode background service"
+type = "oneshot"
+remain_after_exit = true
+working_directory = "~"
+environment = { PATH = "%h/.local/bin:%h/.opencode/bin:%h/.local/share/mise/shims:/usr/local/bin:/usr/bin:/bin" }
+exec_start = "~/.local/share/mise/shims/opencode service start"
+exec_stop = "~/.local/share/mise/shims/opencode service stop"
+start = false
+
+[bootstrap.linux.systemd.units.paseo]
+description = "Paseo daemon"
+requires = ["dev.mise.opencode.service"]
+after = ["dev.mise.opencode.service"]
+working_directory = "~"
+environment = { PATH = "%h/.local/bin:%h/.opencode/bin:%h/.local/share/mise/shims:/usr/local/bin:/usr/bin:/bin" }
+exec_start = "~/.local/share/mise/shims/paseo daemon run"
+restart = "always"
+restart_sec = "5"
+start = false
+
+[bootstrap.linux.systemd.units.opencode-tailscale]
+description = "Tailscale Serve - OpenCode HTTPS on port 49374"
+after = ["dev.mise.opencode.service"]
+wants = ["dev.mise.opencode.service"]
+exec_start = "/usr/bin/tailscale serve --yes --https=49374 http://127.0.0.1:49374"
+restart = "always"
+restart_sec = "5"
+start = false
+
+[bootstrap.linux.systemd.units.paseo-tailscale]
+description = "Tailscale Serve - Paseo"
+after = ["dev.mise.paseo.service"]
+wants = ["dev.mise.paseo.service"]
+exec_start = "/usr/bin/tailscale serve --yes 6767"
+restart = "always"
+restart_sec = "5"
+start = false
+
+[bootstrap.linux.systemd.units.pitchfork-tailscale]
+description = "Tailscale Serve - Pitchfork web UI on port 3120"
+exec_start = "/usr/bin/tailscale serve --yes --https=3120 http://127.0.0.1:3120"
+restart = "always"
+restart_sec = "5"
+start = false
+
+# Placeholders that the iron-proxy gateway swaps for the real secrets on the
+# way out. The guest never holds the real tokens.
+[env]
+GITHUB_TOKEN = "__secret_github_token"
+GH_TOKEN = "__secret_github_token"
+MISE_GITHUB_TOKEN = "__secret_github_token"
+OPENROUTER_KEY = "__secret_openrouter_key"
+
+[dotfiles]
+"~/.config/atuin/config.toml" = { mode = "track" }
+"~/.config/mise" = { mode = "track" }
+"~/.config/opencode/opencode.jsonc" = { mode = "track" }
+"~/.config/pitchfork/config.toml" = { mode = "track" }
+"~/.config/procs/config.toml" = { mode = "track" }
+"~/.config/starship.toml" = { mode = "track" }
+"~/.aliases.sh" = { mode = "track" }
+"~/.gitconfig" = { mode = "track" }
+"~/.zshrc" = { mode = "track" }
+"~/.zshenv" = { mode = "track" }
+
+[tools]
+atuin = { version = "latest", auto_update = true }
+aube = "latest"
+bat = "latest"
+btop = "latest"
+claude = { version = "latest", auto_update = true }
+eza = "latest"
+fd = "latest"
+gh = { version = "latest", auto_update = true }
+"github:dalance/procs" = "latest"
+"github:max-sixty/worktrunk" = "latest"
+"github:vercel-labs/opensrc" = "latest"
+go = { version = "latest", auto_update = true }
+gum = "latest"
+hunk = "latest"
+jq = "latest"
+neovim = "latest"
+node = { version = "lts", auto_update = true }
+"npm:@getpaseo/cli" = { version = "latest", auto_update = "true" }
+opencode = { version = "latest", allow_builds = ["@opencode/cli"] }
+pitchfork = "latest"
+ripgrep = "latest"
+starship = "latest"
+usage = "latest"
+zoxide = "latest"
+

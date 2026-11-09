@@ -1,0 +1,17 @@
+[core]
+	pager = hunk pager
+[diff]
+	tool = hunk
+[difftool "hunk"]
+	cmd = hunk difftool "$LOCAL" "$REMOTE" "$MERGED"
+[difftool]
+	prompt = false
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !gh auth git-credential
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+	insteadOf = ssh://git@github.com/

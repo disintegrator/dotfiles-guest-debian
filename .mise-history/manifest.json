@@ -1,0 +1,86 @@
+{
+  "format": 1,
+  "enrollment": [
+    {
+      "path": "config",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/atuin/config.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/opencode/opencode.jsonc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/pitchfork/config.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/procs/config.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/starship.toml",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.zshrc",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.aliases.sh",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.zshenv",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.gitconfig",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    }
+  ],
+  "exclude": [],
+  "recipients": [],
+  "permissions": {
+    "config/config.toml": 436,
+    "config/tasks": 509,
+    "config/tasks/bootstrap.sh": 500,
+    "home/.config": 509,
+    "home/.config/atuin": 509,
+    "home/.config/atuin/config.toml": 436,
+    "home/.config/opencode": 509,
+    "home/.config/opencode/opencode.jsonc": 436,
+    "home/.config/pitchfork": 509,
+    "home/.config/pitchfork/config.toml": 436,
+    "home/.config/procs": 509,
+    "home/.config/procs/config.toml": 436,
+    "home/.config/starship.toml": 436,
+    "home/.zshrc": 436,
+    "home/.aliases.sh": 436,
+    "home/.zshenv": 436,
+    "home/.gitconfig": 436
+  }
+}

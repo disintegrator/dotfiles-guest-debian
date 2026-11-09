@@ -1,0 +1,3 @@
+[settings.web]
+auto_start = true
+bind_port = 3120
