@@ -115,6 +115,21 @@ restart = "always"
 restart_sec = "5"
 start = false
 
+# Go leaves go-build* dirs in GOTMPDIR (~/.cache/go-tmp, set in ~/.config/go/env)
+# when `go run` / `go test` is killed. Sweep anything older than a day.
+[bootstrap.linux.systemd.units.go-tmp-clean]
+description = "Remove stale Go temp build dirs"
+type = "oneshot"
+exec_start = "/usr/bin/find %h/.cache/go-tmp -mindepth 1 -maxdepth 1 -name go-build* -mtime +0 -exec /usr/bin/rm -rf {} +"
+start = false
+wanted_by = []
+
+[bootstrap.linux.systemd.units.go-tmp-clean-daily]
+description = "Daily sweep of stale Go temp build dirs"
+on_calendar = "daily"
+persistent = true
+unit = "go-tmp-clean"
+
 # Placeholders that the iron-proxy gateway swaps for the real secrets on the
 # way out. The guest never holds the real tokens.
 [env]
